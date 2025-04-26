@@ -39,7 +39,8 @@ add_executable(portas_logicas portas_logicas.c
                                 src/components/led_rgb/led.c
                                 src/external_libs/inc/ssd1306_i2c.c
                                 src/components/oled/oled.c
-                                src/components/joystick/j.c)
+                                src/components/joystick/j.c
+                                src/components/buttons/buttons.c)
 
 pico_set_program_name(portas_logicas "portas_logicas")
 pico_set_program_version(portas_logicas "0.1")

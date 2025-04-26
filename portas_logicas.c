@@ -6,6 +6,7 @@
 #include "src/components/led_rgb/led.h"
 #include "src/components/oled/oled.h"
 #include "src/components/joystick/j.h"
+#include "src/components/buttons/buttons.h"
 
 int main()
 {
@@ -21,9 +22,19 @@ int main()
     // INICIALIZA JOYSTICK
     SETUP_JOYSTICK();
 
+    // INICIALIZA BOTOES
+    SETUP_BUTTONS();
+
     while (true)
     {
-        printf("Hello, world!\n");
+        bool button_a_state = gpio_get(B_A);
+        bool button_b_state = gpio_get(B_B);
+
+        TOGGLE_LED_COLOR(true, false, false);
+
+        if (!button_a_state && !button_b_state) {
+            TOGGLE_LED_COLOR(false, true, false);
+        }
         sleep_ms(50);
     }
 }
