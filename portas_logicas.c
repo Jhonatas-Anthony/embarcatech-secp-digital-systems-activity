@@ -8,6 +8,8 @@
 #include "src/components/joystick/j.h"
 #include "src/components/buttons/buttons.h"
 
+#include "ports.h"
+
 const char *menu_items[7] = {
     "AND",
     "OR",
@@ -23,7 +25,7 @@ int last_selected_item = -1;
 // PROTOTIPOS
 
 void HANDLE_MENU();
-void SHOW_MENU();
+void CHANGE_PORT();
 
 void PL_AND(bool a, bool b);
 void PL_OR(bool a, bool b);
@@ -59,8 +61,7 @@ int main()
         add_repeating_timer_ms(50, JOYSTICK_CALLBACK, NULL, &timer); */
 
         HANDLE_MENU();
-        SHOW_MENU();
-
+        CHANGE_PORT();
 
         switch (selected_item)
         {
@@ -107,7 +108,7 @@ void HANDLE_MENU()
     }
 }
 
-void SHOW_MENU()
+void CHANGE_PORT()
 {
     if (selected_item == last_selected_item) // Se não mudou, evita redesenhar
         return;
@@ -115,15 +116,30 @@ void SHOW_MENU()
     last_selected_item = selected_item; // Atualiza o último item selecionado
     adc_select_input(0);
 
-    char menu_entry[32];
-
-    snprintf(menu_entry, sizeof(menu_entry), "b %s p", menu_items[selected_item]);
-
-    DISPLAY_RENDER(menu_entry, 10);
-
-    render_on_display(ssd, &frame_area);
-
-    render_on_display(ssd, &frame_area);
+    switch (selected_item)
+    {
+    case 0:
+        DRAW_BITMAP(_AND_PORT);
+        break;
+    case 1:
+        DRAW_BITMAP(_OR_PORT);
+        break;
+    case 2:
+        DRAW_BITMAP(_NOT_PORT);
+        break;
+    case 3:
+        DRAW_BITMAP(_NAND_PORT);
+        break;
+    case 4:
+        DRAW_BITMAP(_NOR_PORT);
+        break;
+    case 5:
+        DRAW_BITMAP(_XOR_PORT);
+        break;
+    case 6:
+        DRAW_BITMAP(_XNOR_PORT);
+        break;
+    }
 }
 
 ////////////////////
