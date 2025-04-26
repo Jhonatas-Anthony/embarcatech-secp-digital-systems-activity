@@ -4,6 +4,7 @@
 #include "hardware/i2c.h"
 
 #include "src/components/led_rgb/led.h"
+#include "src/components/oled/oled.h"
 
 int main()
 {
@@ -12,12 +13,16 @@ int main()
     // INICIALIZA LEDS
     SETUP_LED_RGB();
 
+    // INICIALIZA OLED
+    SETUP_I2C();
+    CLEAR_OLED();
+
     while (true)
     {
         printf("Hello, world!\n");
-        // TOGGLE_LED_COLOR(true, false, false); -- CHAMA LED VERMELHO
-        // sleep_ms(1000);
-        // TOGGLE_LED_COLOR(false, true, false); -- CHAMA LED VERDE
         sleep_ms(1000);
     }
 }
+
+// TOGGLE_LED_COLOR(true, false, false); -- CHAMA LED VERMELHO
+// TOGGLE_LED_COLOR(false, true, false); -- CHAMA LED VERDE
