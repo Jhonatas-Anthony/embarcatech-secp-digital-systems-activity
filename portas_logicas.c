@@ -113,6 +113,7 @@ void CHANGE_PORT()
     if (selected_item == last_selected_item) // Se não mudou, evita redesenhar
         return;
 
+    TOGGLE_LED_COLOR(false, false, false);
     last_selected_item = selected_item; // Atualiza o último item selecionado
     adc_select_input(0);
 
@@ -272,5 +273,3 @@ void PL_XNOR(bool a, bool b)
         TOGGLE_LED_COLOR(true, false, false);
     }
 }
-// TOGGLE_LED_COLOR(true, false, false); -- CHAMA LED VERMELHO
-// TOGGLE_LED_COLOR(false, true, false); -- CHAMA LED VERDE
