@@ -18,8 +18,6 @@ void CLEAR_OLED();
 
 void TEXT_ON_OLED(char *text[]);
 
-// escreve painel
-
-// desenha painel
+void DISPLAY_RENDER(char *text, int y_pos);
 
 #endif

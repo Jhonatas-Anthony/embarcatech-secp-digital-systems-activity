@@ -39,3 +39,8 @@ void TEXT_ON_OLED(char *text[])
 
     render_on_display(ssd, &frame_area);
 }
+
+void DISPLAY_RENDER(char *text, int y_pos)
+{
+    ssd1306_draw_string(ssd, 5, y_pos, text);
+}

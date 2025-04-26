@@ -8,6 +8,31 @@
 #include "src/components/joystick/j.h"
 #include "src/components/buttons/buttons.h"
 
+const char *menu_items[7] = {
+    "AND",
+    "OR",
+    "NOT",
+    "NAND",
+    "NOR",
+    "XOR",
+    "XNOR"};
+
+int selected_item = 0;
+int last_selected_item = -1;
+
+// PROTOTIPOS
+
+void HANDLE_MENU();
+void SHOW_MENU();
+
+void PL_AND(bool a, bool b);
+void PL_OR(bool a, bool b);
+void PL_NOT(bool a);
+void PL_NAND(bool a, bool b);
+void PL_NOR(bool a, bool b);
+void PL_XOR(bool a, bool b);
+void PL_XNOR(bool a, bool b);
+
 int main()
 {
     stdio_init_all();
@@ -30,14 +55,206 @@ int main()
         bool button_a_state = gpio_get(B_A);
         bool button_b_state = gpio_get(B_B);
 
-        TOGGLE_LED_COLOR(true, false, false);
+        /* struct repeating_timer timer;
+        add_repeating_timer_ms(50, JOYSTICK_CALLBACK, NULL, &timer); */
 
-        if (!button_a_state && !button_b_state) {
-            TOGGLE_LED_COLOR(false, true, false);
+        HANDLE_MENU();
+        SHOW_MENU();
+
+
+        switch (selected_item)
+        {
+        case 0:
+            PL_AND(button_a_state, button_b_state);
+            break;
+        case 1:
+            PL_OR(button_a_state, button_b_state);
+            break;
+        case 2:
+            PL_NOT(button_a_state);
+            break;
+        case 3:
+            PL_NAND(button_a_state, button_b_state);
+            break;
+        case 4:
+            PL_NOR(button_a_state, button_b_state);
+            break;
+        case 5:
+            PL_XOR(button_a_state, button_b_state);
+            break;
+        case 6:
+            PL_XNOR(button_a_state, button_b_state);
+            break;
         }
-        sleep_ms(50);
+
+        sleep_ms(150);
     }
 }
 
+void HANDLE_MENU()
+{
+    // Leitura do eixo Y
+    uint adc_y_raw = adc_read();
+
+    // Verifica a direção do movimento e impede que o valor de selected_item seja menor que 0 ou maior que 6
+    if (adc_y_raw < 100 && selected_item < 6)
+    {
+        selected_item++;
+    }
+    else if (adc_y_raw > 3900 && selected_item > 0)
+    {
+        selected_item--;
+    }
+}
+
+void SHOW_MENU()
+{
+    if (selected_item == last_selected_item) // Se não mudou, evita redesenhar
+        return;
+
+    last_selected_item = selected_item; // Atualiza o último item selecionado
+    adc_select_input(0);
+
+    char menu_entry[32];
+
+    snprintf(menu_entry, sizeof(menu_entry), "b %s p", menu_items[selected_item]);
+
+    DISPLAY_RENDER(menu_entry, 10);
+
+    render_on_display(ssd, &frame_area);
+
+    render_on_display(ssd, &frame_area);
+}
+
+////////////////////
+// A // B // A B ///
+// 0    0     0   //
+// 0    1     0   //
+// 1    0     0   //
+// 1    1     1   //
+////////////////////
+void PL_AND(bool a, bool b)
+{
+    if (!a && !b)
+    {
+        TOGGLE_LED_COLOR(false, true, false);
+    }
+    else
+    {
+        TOGGLE_LED_COLOR(true, false, false);
+    }
+}
+
+////////////////////
+// A // B // A B ///
+// 0    0     0   //
+// 0    1     1   //
+// 1    0     1   //
+// 1    1     1   //
+////////////////////
+void PL_OR(bool a, bool b)
+{
+    if (!a || !b)
+    {
+        TOGGLE_LED_COLOR(false, true, false);
+    }
+    else
+    {
+        TOGGLE_LED_COLOR(true, false, false);
+    }
+}
+
+//////////////
+// A // !A ///
+// 0     1  //
+// 1     0  //
+//////////////
+void PL_NOT(bool a)
+{
+    if (a)
+    {
+        TOGGLE_LED_COLOR(false, true, false);
+    }
+    else
+    {
+        TOGGLE_LED_COLOR(true, false, false);
+    }
+}
+
+////////////////////
+// A // B // A B ///
+// 0    0     1   //
+// 0    1     1   //
+// 1    0     1   //
+// 1    1     0   //
+////////////////////
+void PL_NAND(bool a, bool b)
+{
+    if (!(!a && !b))
+    {
+        TOGGLE_LED_COLOR(false, true, false);
+    }
+    else
+    {
+        TOGGLE_LED_COLOR(true, false, false);
+    }
+}
+
+////////////////////
+// A // B // A B ///
+// 0    0     1   //
+// 0    1     0   //
+// 1    0     0   //
+// 1    1     0   //
+////////////////////
+void PL_NOR(bool a, bool b)
+{
+    if (!(!a || !b))
+    {
+        TOGGLE_LED_COLOR(false, true, false);
+    }
+    else
+    {
+        TOGGLE_LED_COLOR(true, false, false);
+    }
+}
+
+////////////////////
+// A // B // A B ///
+// 0    0     1   //
+// 0    1     0   //
+// 1    0     0   //
+// 1    1     1   //
+////////////////////
+void PL_XOR(bool a, bool b)
+{
+    if (!(a ^ b))
+    {
+        TOGGLE_LED_COLOR(false, true, false);
+    }
+    else
+    {
+        TOGGLE_LED_COLOR(true, false, false);
+    }
+}
+
+////////////////////
+// A // B // A B ///
+// 0    0     0   //
+// 0    1     1   //
+// 1    0     1   //
+// 1    1     0   //
+////////////////////
+void PL_XNOR(bool a, bool b)
+{
+    if (!a ^ !b)
+    {
+        TOGGLE_LED_COLOR(false, true, false);
+    }
+    else
+    {
+        TOGGLE_LED_COLOR(true, false, false);
+    }
+}
 // TOGGLE_LED_COLOR(true, false, false); -- CHAMA LED VERMELHO
 // TOGGLE_LED_COLOR(false, true, false); -- CHAMA LED VERDE
