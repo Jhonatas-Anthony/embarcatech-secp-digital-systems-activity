@@ -38,7 +38,8 @@ pico_sdk_init()
 add_executable(portas_logicas portas_logicas.c
                                 src/components/led_rgb/led.c
                                 src/external_libs/inc/ssd1306_i2c.c
-                                src/components/oled/oled.c)
+                                src/components/oled/oled.c
+                                src/components/joystick/j.c)
 
 pico_set_program_name(portas_logicas "portas_logicas")
 pico_set_program_version(portas_logicas "0.1")
@@ -60,7 +61,7 @@ target_include_directories(portas_logicas PRIVATE
 target_link_libraries(portas_logicas 
         hardware_spi
         hardware_i2c
-        
+        hardware_adc
         )
 
 pico_add_extra_outputs(portas_logicas)

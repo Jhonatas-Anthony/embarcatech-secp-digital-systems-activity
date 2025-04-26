@@ -5,6 +5,7 @@
 
 #include "src/components/led_rgb/led.h"
 #include "src/components/oled/oled.h"
+#include "src/components/joystick/j.h"
 
 int main()
 {
@@ -17,10 +18,13 @@ int main()
     SETUP_I2C();
     CLEAR_OLED();
 
+    // INICIALIZA JOYSTICK
+    SETUP_JOYSTICK();
+
     while (true)
     {
         printf("Hello, world!\n");
-        sleep_ms(1000);
+        sleep_ms(50);
     }
 }
 
