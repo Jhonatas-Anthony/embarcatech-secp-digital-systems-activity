@@ -238,14 +238,14 @@ void PL_NOR(bool a, bool b)
 
 ////////////////////
 // A // B // A B ///
-// 0    0     1   //
-// 0    1     0   //
-// 1    0     0   //
-// 1    1     1   //
+// 0    0     0   //
+// 0    1     1   //
+// 1    0     1   //
+// 1    1     0   //
 ////////////////////
 void PL_XOR(bool a, bool b)
 {
-    if (!(a ^ b))
+    if (!a ^ !b)
     {
         TOGGLE_LED_COLOR(false, true, false);
     }
@@ -257,14 +257,14 @@ void PL_XOR(bool a, bool b)
 
 ////////////////////
 // A // B // A B ///
-// 0    0     0   //
-// 0    1     1   //
-// 1    0     1   //
-// 1    1     0   //
+// 0    0     1   //
+// 0    1     0   //
+// 1    0     0   //
+// 1    1     1   //
 ////////////////////
 void PL_XNOR(bool a, bool b)
 {
-    if (!a ^ !b)
+    if (!(a ^ b)) 
     {
         TOGGLE_LED_COLOR(false, true, false);
     }
