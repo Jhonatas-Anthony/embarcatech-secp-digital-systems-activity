@@ -152,7 +152,7 @@ void CHANGE_PORT()
 ////////////////////
 void PL_AND(bool a, bool b)
 {
-    if (!a && !b)
+    if (a && b)
     {
         TOGGLE_LED_COLOR(false, true, false);
     }
@@ -171,7 +171,7 @@ void PL_AND(bool a, bool b)
 ////////////////////
 void PL_OR(bool a, bool b)
 {
-    if (!a || !b)
+    if (a || b)
     {
         TOGGLE_LED_COLOR(false, true, false);
     }
@@ -190,11 +190,11 @@ void PL_NOT(bool a)
 {
     if (a)
     {
-        TOGGLE_LED_COLOR(false, true, false);
+        TOGGLE_LED_COLOR(true, false, false);
     }
     else
     {
-        TOGGLE_LED_COLOR(true, false, false);
+        TOGGLE_LED_COLOR(false, true, false);
     }
 }
 
@@ -207,7 +207,7 @@ void PL_NOT(bool a)
 ////////////////////
 void PL_NAND(bool a, bool b)
 {
-    if (!(!a && !b))
+    if (!(a && b))
     {
         TOGGLE_LED_COLOR(false, true, false);
     }
@@ -226,7 +226,7 @@ void PL_NAND(bool a, bool b)
 ////////////////////
 void PL_NOR(bool a, bool b)
 {
-    if (!(!a || !b))
+    if (!(a || b))
     {
         TOGGLE_LED_COLOR(false, true, false);
     }
@@ -245,7 +245,7 @@ void PL_NOR(bool a, bool b)
 ////////////////////
 void PL_XOR(bool a, bool b)
 {
-    if (!a ^ !b)
+    if (a ^ b)
     {
         TOGGLE_LED_COLOR(false, true, false);
     }
